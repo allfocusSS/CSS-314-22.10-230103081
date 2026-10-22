@@ -1,20 +1,3 @@
-/*
- * CSS 314 - TASK 7: Arithmetic Intensity vs. Memory Bottlenecks
- * Student ID: 230103081
- *
- * macOS (Apple Silicon):
- *   clang -O3 -std=c11 -Wall -Wextra -pthread task7.c -o task7 -lm
- *   ./task7 | tee task7_output.txt
- *
- * Both kernels process the SAME 30,000,000-element float64 input.
- * Threads own nonoverlapping slices of the output buffer; no data races.
- * Timings use CLOCK_MONOTONIC and exclude allocation/input initialization.
- * Thread creation is excluded with a common start gate. Reported times
- * are the median of 3 runs to reduce timing noise.
- *
- * This is a scaling experiment, not a direct memory-controller measurement.
- */
-
 #ifdef __APPLE__
 #define _DARWIN_C_SOURCE 1
 #else
