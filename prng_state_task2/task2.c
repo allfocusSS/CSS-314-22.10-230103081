@@ -1,21 +1,3 @@
-/*
- * TASK 2 — Pseudo-Random Generator State Bottleneck
- * Student ID: 230103081
- *
- * Compile on macOS or Linux:
- *   clang -O3 -std=c11 -Wall -Wextra -pthread task2.c -o task2 -lm
- * Run:
- *   ./task2
- *
- * Generates 40 million Monte Carlo sample points with four pthreads.
- * Both modes use the same SplitMix64 PRNG and the same point-in-circle test.
- * In shared mode a mutex protects the two draws that make one (x, y) point.
- * In independent mode each thread owns its generator state, seeded as
- *   (Student_ID * 10) + thread_index  (indices 0, 1, 2, 3).
- *
- * Timings include thread creation and joining but exclude file I/O.
- * The result file is created afresh by this program on the machine running it.
- */
 
 #include <errno.h>
 #include <math.h>
