@@ -1,0 +1,14 @@
+TASK 3: Prefix Scan (Step Efficiency vs. Work Efficiency)
+Host: Darwin (arm64)
+Student ID: 230103081
+Array size: 2000000 integers
+Input range: 1..10 (SplitMix64, Student ID seed)
+Parallel threads: 4
+Benchmark: median of 9 runs (wall clock, ms)
+Serial Time (ms): 1.421
+Parallel Time (ms): 0.730
+Speedup (serial / parallel): 1.947x
+Serial output[-1]: 11001054
+Parallel output[-1]: 11001054
+Verification Status: PASS
+Full array equality: PASS
