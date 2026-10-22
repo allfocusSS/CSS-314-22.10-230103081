@@ -1,0 +1,25 @@
+TASK 6 - Synchronization Cost & Data Loss
+Student ID: 230103081
+Platform: Darwin 25.5.0 (arm64)
+Worker threads: 4
+Increments per thread: 2000000
+Expected final value: 8000000
+
+UNPROTECTED (relaxed load + store; no atomic increment)
+  Actual final value: 2047982
+  Lost updates: 5952018
+  Lost updates: 74.4002%
+  Wall-clock time: 11.878 ms
+
+ATOMIC (atomic_fetch_add, correct result)
+  Actual final value: 8000000
+  Wall-clock time: 81.966 ms
+
+MUTEX (pthread_mutex_lock/unlock, correct result)
+  Actual final value: 8000000
+  Wall-clock time: 429.454 ms
+
+Synchronization overhead versus unprotected run:
+  Atomic RMW penalty: +70.088 ms (6.90x time)
+  Mutex lock penalty: +417.576 ms (36.16x time)
+Verification: PASSED (atomic and mutex both reached 8,000,000)
