@@ -1,15 +1,4 @@
-/*
- * CSS 314 — Task 5: The Overhead Crossover Point
- * Student ID: 230103081
- *
- * Compile (macOS / Linux):
- *     clang -O2 -std=c11 -Wall -Wextra -pthread task5.c -o task5
- * Run (save the real output of YOUR computer):
- *     ./task5 | tee task5_output.txt
- *
- * Parallel timings INCLUDE pthread creation and joining: these are the
- * overheads that this assignment is designed to investigate.
- */
+
 #if defined(__APPLE__)
 #  define _DARWIN_C_SOURCE 1
 #elif defined(__linux__)
