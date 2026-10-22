@@ -1,22 +1,3 @@
-/*
- * TASK 3 — Cache Line Contention (False Sharing)
- * Student ID: 230103081
- *
- * Build (macOS or Linux):
- *   clang -O2 -std=c11 -Wall -Wextra -pthread task3.c -o task3
- * Run and save the actual console output:
- *   ./task3 | tee task3_output.txt
- *
- * One pthread per detected PHYSICAL CPU core. Every thread increments its
- * own volatile uint64_t counter exactly 50,000,000 times. The experiment
- * changes only counter spacing: adjacent uint64_t elements vs. individually
- * cache-line-aligned slots (128 bytes on Apple Silicon). Volatile prevents the compiler from
- * converting the 50M memory updates to one write at the end. No atomics or
- * locks are needed: every counter has exactly one writing thread.
- *
- * Timing includes pthread creation/join but excludes memory allocation.
- */
-
 #ifdef __APPLE__
 /* Expose Darwin's BSD sysctl types such as u_int and u_char. */
 #define _DARWIN_C_SOURCE 1
