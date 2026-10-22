@@ -1,0 +1,22 @@
+CSS 314 - TASK 5: OVERHEAD CROSSOVER POINT
+Student ID: 230103081
+Platform: macOS
+Available logical cores / pthread workers: 8
+Operation: y[i] = 1.125 * x[i] + 0.375 (double)
+Trials per size: 9 (median reported)
+Parallel time includes thread creation/join overhead.
+Speedup = serial time / parallel time; >1 means parallel wins.
+
+           N |      Serial (ms) |    Parallel (ms) |      Speedup | Winner
+-------------+------------------+------------------+--------------+---------
+         100 |         0.000019 |         0.108000 |     0.000178 | SERIAL
+        1000 |         0.000120 |         0.094000 |     0.001272 | SERIAL
+       10000 |         0.000961 |         0.067000 |     0.014343 | SERIAL
+      100000 |         0.015655 |         0.080000 |     0.195688 | SERIAL
+     1000000 |         0.137350 |         0.210000 |     0.654048 | SERIAL
+    10000000 |         2.259500 |         2.752000 |     0.821039 | SERIAL
+
+CROSSOVER ANALYSIS (only tested N values):
+No SLOWER -> FASTER crossover among the six tested sizes.
+A precise per-element threshold cannot be established from only six noisy benchmarks.
+Verification: PASSED for all N
