@@ -1,0 +1,26 @@
+TASK 4 - Work Stealing & Scheduling Under Skew
+Items: 1000 (indices 0..999); workers: 4
+Workload per item: sleep(0.0001 * (i % 20)) seconds
+Times use CLOCK_MONOTONIC; completion times measured from common start.
+
+Strategy A: Static equal blocks
+  Worker 0: 250 items, finished at 0.288029 s
+  Worker 1: 250 items, finished at 0.301896 s
+  Worker 2: 250 items, finished at 0.288007 s
+  Worker 3: 250 items, finished at 0.301874 s
+  Total items processed:    1000 / 1000
+  Total execution time:     0.301969 s
+  Min completion time:      0.288007 s
+  Max completion time:      0.301896 s
+  Completion delta max-min: 0.013889 s
+
+Strategy B: Dynamic shared queue (chunk=5)
+  Worker 0: 280 items, finished at 0.291045 s
+  Worker 1: 190 items, finished at 0.301813 s
+  Worker 2: 255 items, finished at 0.295465 s
+  Worker 3: 275 items, finished at 0.296605 s
+  Total items processed:    1000 / 1000
+  Total execution time:     0.301897 s
+  Min completion time:      0.291045 s
+  Max completion time:      0.301813 s
+  Completion delta max-min: 0.010768 s
