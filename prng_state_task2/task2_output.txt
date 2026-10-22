@@ -1,0 +1,10 @@
+TASK 2: Pseudo-Random Generator State Bottleneck
+Host: Darwin (arm64)
+Student ID: 230103081
+Threads: 4
+Sample points: 40000000
+Independent seeds: 2301030810, 2301030811, 2301030812, 2301030813
+Reference Math.PI: 3.141592653589793
+Shared PRNG (mutex): pi = 3.141637100 | absolute error = 0.000044446 | wall time = 662.921 ms
+Independent PRNG (per thread): pi = 3.141587100 | absolute error = 0.000005554 | wall time = 13.640 ms
+Speedup (shared / independent): 48.601x
