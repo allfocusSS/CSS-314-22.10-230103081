@@ -1,14 +1,3 @@
-"""Task 2: multicore sum scaling vs. Amdahl's Law (P = 0.95).
-
-Requires: numpy (python3 -m pip install numpy)
-Run: python3 task2.py | tee task2_output.txt
-
-NumPy float64 sum releases the GIL, so worker threads can sum independent
-slices concurrently. The pool is warmed up before timing. Each wall time
-is the median of five full sum operations, including task dispatch and result
-combination but excluding input generation and thread-pool startup.
-"""
-
 import os
 
 # Restrict any numerical libraries to one internal thread per worker.
