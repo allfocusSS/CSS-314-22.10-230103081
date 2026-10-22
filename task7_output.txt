@@ -1,0 +1,29 @@
+TASK 7 - Arithmetic Intensity vs. Memory Bottlenecks
+Student ID: 230103081
+OS / CPU architecture: Darwin arm64
+Available logical cores: 8
+Array elements: 30000000 (float64; 30,000,000 per array)
+Trials per test: 3 (median time, milliseconds)
+Timing: kernel wall-clock, synchronized start, excludes setup/allocation
+
+Kernel A - Memory-bound: B[i] = A[i]
+ Workers | Wall Time (ms) |   Speedup | Efficiency (%)
+---------+----------------+-----------+---------------
+       1 |          6.510 |     1.000 |        100.00
+       2 |          6.252 |     1.041 |         52.06
+       8 |          8.149 |     0.799 |          9.99
+
+Kernel B - Compute-bound: B[i] = sin(A[i])*cos(A[i])+tan(A[i])
+ Workers | Wall Time (ms) |   Speedup | Efficiency (%)
+---------+----------------+-----------+---------------
+       1 |        218.816 |     1.000 |        100.00
+       2 |        112.106 |     1.952 |         97.59
+       8 |         49.411 |     4.428 |         55.36
+
+Scaling interpretation at 8 workers:
+  Kernel A efficiency: 9.99%
+  Kernel B efficiency: 55.36%
+  Kernel A (vector copy) STALLED in scaling, consistent with RAM bandwidth saturation.
+  Kernel B scaled better; its higher arithmetic intensity reduces bandwidth pressure.
+  Note: timing alone cannot prove hardware memory-channel saturation.
+Verification: PASSED (sample outputs from both kernels)
