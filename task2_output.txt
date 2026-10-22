@@ -1,0 +1,20 @@
+Student ID: 230103081
+OS: macOS-26.5-arm64-arm-64bit-Mach-O
+CPU / Platform: arm
+Logical cores (os.cpu_count): 8
+Array size: 20,000,000
+Array dtype: float64
+Parallel execution: ThreadPoolExecutor + NumPy float64 sum
+Timing: median of 5 runs; warm-up and pool startup excluded
+Amdahl parallel fraction P: 0.95
+
+  Cores | Wall Time (ms) |   Speedup | Amdahl Upper Bound
+------------------------------------------------------------
+      1 |          3.691 |     1.000 |              1.000
+      2 |          2.635 |     1.401 |              1.905
+      4 |          2.594 |     1.423 |              3.478
+      8 |          2.766 |     1.334 |              5.926
+     16 |          2.865 |     1.288 |              9.143
+
+Verified sum: 10000515.4983304050
+Result: all worker counts produced the same sum (within float64 tolerance).
