@@ -10,15 +10,20 @@
  * One pthread per detected PHYSICAL CPU core. Every thread increments its
  * own volatile uint64_t counter exactly 50,000,000 times. The experiment
  * changes only counter spacing: adjacent uint64_t elements vs. individually
- * cache-line-aligned 64-byte slots. Volatile prevents the compiler from
+ * cache-line-aligned slots (128 bytes on Apple Silicon). Volatile prevents the compiler from
  * converting the 50M memory updates to one write at the end. No atomics or
  * locks are needed: every counter has exactly one writing thread.
  *
  * Timing includes pthread creation/join but excludes memory allocation.
  */
 
+#ifdef __APPLE__
+/* Expose Darwin's BSD sysctl types such as u_int and u_char. */
+#define _DARWIN_C_SOURCE 1
+#else
 #define _GNU_SOURCE
 #define _POSIX_C_SOURCE 200809L
+#endif
 #include <inttypes.h>
 #include <pthread.h>
 #include <stdint.h>
@@ -38,7 +43,12 @@
 
 #define STUDENT_ID 230103081
 #define INCREMENTS_PER_THREAD UINT64_C(50000000)
+/* Apple Silicon reports 128-byte cache lines; Linux commonly uses 64. */
+#ifdef __APPLE__
+#define CACHE_LINE_BYTES 128
+#else
 #define CACHE_LINE_BYTES 64
+#endif
 
 typedef struct {
     volatile uint64_t value;
@@ -104,6 +114,19 @@ static int linux_physical_cores(void) {
 }
 #endif
 
+static int logical_core_count(void) {
+#ifdef __APPLE__
+    int count = 0;
+    size_t size = sizeof(count);
+    if (sysctlbyname("hw.logicalcpu", &count, &size, NULL, 0) == 0 && count > 0)
+        return count;
+    return 1;
+#else
+    long count = sysconf(_SC_NPROCESSORS_ONLN);
+    return count > 0 ? (int)count : 1;
+#endif
+}
+
 static int physical_core_count(void) {
 #ifdef __APPLE__
     int count = 0;
@@ -114,8 +137,7 @@ static int physical_core_count(void) {
     int count = linux_physical_cores();
     if (count > 0) return count;
 #endif
-    long fallback = sysconf(_SC_NPROCESSORS_ONLN);
-    return fallback > 0 ? (int)fallback : 1;
+    return logical_core_count();
 }
 
 static double current_time_ms(void) {
@@ -162,7 +184,7 @@ static double benchmark(worker_args_t *args, int count) {
 
 int main(void) {
     const int workers = physical_core_count();
-    long logical_cores = sysconf(_SC_NPROCESSORS_ONLN);
+    const int logical_cores = logical_core_count();
     if (workers < 1 || workers > 4096) {
         fprintf(stderr, "Invalid physical core count: %d\n", workers);
         return EXIT_FAILURE;
@@ -190,10 +212,10 @@ int main(void) {
     printf("Student ID: %d\n", STUDENT_ID);
     printf("OS: %s %s (%s)\n", info.sysname, info.release, info.machine);
     printf("Physical cores / threads spawned: %d\n", workers);
-    printf("Logical processors reported: %ld\n", logical_cores);
+    printf("Logical processors reported: %d\n", logical_cores);
     printf("Increments per thread: %" PRIu64 "\n", INCREMENTS_PER_THREAD);
     printf("Unpadded shared_counts size: %d elements (8-byte stride)\n", workers);
-    printf("Padded counter stride: %zu bytes (64-byte aligned)\n", sizeof(*padded_counts));
+    printf("Padded counter stride: %zu bytes (%d-byte aligned)\n", sizeof(*padded_counts), CACHE_LINE_BYTES);
     puts("Timing: wall clock, includes thread creation/join, excludes allocation");
     puts("");
 
@@ -221,7 +243,9 @@ int main(void) {
     printf("%-22s | %15s\n", "Memory Layout", "Wall Time (ms)");
     puts("-----------------------------------------");
     printf("%-22s | %15.3f\n", "Unpadded Shared", unpadded_ms);
-    printf("%-22s | %15.3f\n", "Padded (64-byte)", padded_ms);
+    char padded_label[48];
+    snprintf(padded_label, sizeof(padded_label), "Padded (%d-byte)", CACHE_LINE_BYTES);
+    printf("%-22s | %15.3f\n", padded_label, padded_ms);
     printf("\nExecution ratio (Unpadded / Padded): %.3fx\n", unpadded_ms / padded_ms);
     printf("Expected total per layout: %" PRIu64 "\n", expected);
     printf("Unpadded total: %" PRIu64 "\n", unpadded_total);

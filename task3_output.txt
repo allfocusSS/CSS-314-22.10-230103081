@@ -1,0 +1,20 @@
+TASK 3: Cache Line Contention (False Sharing)
+Student ID: 230103081
+OS: Darwin 25.5.0 (arm64)
+Physical cores / threads spawned: 8
+Logical processors reported: 8
+Increments per thread: 50000000
+Unpadded shared_counts size: 8 elements (8-byte stride)
+Padded counter stride: 128 bytes (128-byte aligned)
+Timing: wall clock, includes thread creation/join, excludes allocation
+
+Memory Layout          |  Wall Time (ms)
+-----------------------------------------
+Unpadded Shared        |         156.690
+Padded (128-byte)      |          34.020
+
+Execution ratio (Unpadded / Padded): 4.606x
+Expected total per layout: 400000000
+Unpadded total: 400000000
+Padded total: 400000000
+Verification: PASSED (each worker performed 50,000,000 increments)
