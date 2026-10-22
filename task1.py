@@ -1,12 +1,5 @@
-"""Task 1: hardware probe and single-threaded serial baseline.
-
-Requires: numpy (python3 -m pip install numpy)
-Run: python3 task1.py | tee task1_output.txt
-"""
-
 import os
 
-# Set the thread limits before importing NumPy.
 for name in (
     "OMP_NUM_THREADS",
     "OPENBLAS_NUM_THREADS",
