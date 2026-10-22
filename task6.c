@@ -1,22 +1,3 @@
-/*
- * CSS 314 - Task 6: Synchronization Cost & Data Loss
- * Student ID: 230103081
- *
- * Four pthreads each attempt 2,000,000 increments in three modes:
- *  1) UNPROTECTED: separate relaxed atomic load and store. The individual
- *     accesses are well-defined, but the combined increment is NOT atomic;
- *     overlapping threads lose updates. No lock or synchronizing RMW is used.
- *  2) ATOMIC RMW: atomic_fetch_add, which cannot lose updates.
- *  3) MUTEX: pthread_mutex_lock/unlock around each increment; this separately
- *     demonstrates the cost of an actual synchronization lock.
- *
- * The first approach deliberately shows a logical race without invoking the
- * undefined behavior of ordinary non-atomic shared C variable accesses.
- *
- * macOS: clang -O2 -std=c11 -Wall -Wextra -pthread task6.c -o task6
- * Run:   ./task6 | tee task6_output.txt
- */
-
 #define _POSIX_C_SOURCE 200809L
 
 #include <inttypes.h>
